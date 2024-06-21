@@ -1,0 +1,26 @@
+# https://github.com/ros-controls/ros2_control_demos/blob/humble/example_2/bringup/config/diffbot_controllers.yaml
+
+controller_manager:
+   ros__parameters:
+      update_rate: 100
+      use_sim_time: true
+
+      joint_state_broadcaster:
+         type: joint_state_broadcaster/JointStateBroadcaster
+
+      diffbot_base_controller:
+         type: diff_drive_controller/DiffDriveController
+
+diffbot_base_controller:
+   ros__parameters:
+      left_wheel_names: ["base_left_wheel"]
+      right_wheel_names: ["base_right_wheel"]
+      wheel_separation: 0.45
+      wheel_radius: 0.1
+      
+      publish_rate: 50.0
+      odom_frame_id: odom
+      base_frame_id: base_link
+      
+      use_stamped_vel: false
+      enable_odom_tf: true
