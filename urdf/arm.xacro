@@ -25,13 +25,15 @@
             </geometry>
             <origin xyz="0 0 ${arm_base_height / 2.0}" rpy="0 0 0" />
         </collision>
-        <inertial>
+        <!-- <inertial>
             <origin xyz= "0 0 ${arm_base_height / 2.0}" rpy= "0 0 0"/>
             <mass value= "0.5" />
             <inertia ixx="${(0.5/12) * (arm_base_length * arm_base_length + arm_base_height * arm_base_height)}" ixy="0" ixz="0"
                      iyy = "${(0.5/12) * (arm_base_length * arm_base_length + arm_base_width * arm_base_width)}" iyz="0"  
                      izz="${(0.5/12) * (arm_base_height * arm_base_height + arm_base_width * arm_base_width)}" />
-        </inertial>
+        </inertial> -->
+        <xacro:box_inertia m="0.5" l="${arm_base_length}" w="${arm_base_width}" 
+        h="${arm_base_height}" xyz="0 0 ${arm_base_height/2.0}" rpy="0 0 0"/>
     </link>
 
 
@@ -51,13 +53,15 @@
             </geometry>
             <origin xyz="0 0 ${forearm_length / 2.0}" rpy="0 0 0" />
         </collision>
-        <inertial>
+        <!-- <inertial>
             <origin xyz= "0 0 ${forearm_length / 2.0}" rpy= "0 0 0"/>
             <mass value= "0.3" />
             <inertia ixx="${(0.3/12) * (3 * forearm_radius * forearm_radius + forearm_length * forearm_length)}" ixy="0" ixz="0"
                      iyy = "${(0.3/12) * (3 * forearm_radius * forearm_radius + forearm_length * forearm_length)}" iyz="0"  
                      izz="${(0.3/2) * (forearm_radius * forearm_radius)}" />
-        </inertial>
+        </inertial> -->
+        <xacro:solid-cylinder_inertia m= "0.3" r= "${forearm_radius}"  h="${forearm_length}"
+                         xyz="0 0 ${forearm_length / 2.0}" rpy="0 0 0"/>
     </link>
 
 
@@ -75,13 +79,15 @@
             </geometry>
             <origin xyz="0 0 ${hand_length / 2.0}" rpy="0 0 0" />
         </collision>
-        <inertial>
+        <!-- <inertial>
             <origin xyz= "0 0 ${hand_length / 2.0}" rpy= "0 0 0"/>
             <mass value= "0.3" />
             <inertia ixx="${(0.3/12) * (3 * hand_radius * hand_radius + hand_length * hand_length)}" ixy="0" ixz="0"
                      iyy = "${(0.3/12) * (3 * hand_radius * hand_radius + hand_length * hand_length)}" iyz="0"  
                      izz="${(0.3/2) * (hand_radius * hand_radius)}" />
-        </inertial>
+        </inertial> -->
+        <xacro:solid-cylinder_inertia m= "0.3" r= "${hand_radius}"  h="${hand_length}"
+            xyz="0 0 ${hand_length / 2.0}" rpy="0 0 0"/>
     </link>
 
     
