@@ -2,17 +2,11 @@
 
 To view the bot in rviz and gazebo use
 ```sh
-ros2 launch
-```
-
-* To spawn the bot in rviz2 use <br/>
-```sh
 ros2 launch arm_bot_description display.launch.xml 
 ```
 
 It should appear like this
 ![image](https://github.com/user-attachments/assets/962268ef-70f6-4bb1-bac1-003b7481a897)
-
 
 ## Controlling the bot using keyboard
 
