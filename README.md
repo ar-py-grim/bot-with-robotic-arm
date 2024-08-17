@@ -19,7 +19,7 @@ It should appear like this
 First launch the bot in gazebo environment using
 
 ```sh
-ros2 launch arm_bot_description project_gazebo.launch.xml 
+ros2 launch arm_bot_description bot.launch.py 
 ```
 
 * Then Use the below command in terminal to control the bot from keyboard <br/>
