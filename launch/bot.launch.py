@@ -1,29 +1,40 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, ExecuteProcess
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, ExecuteProcess, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.event_handlers import OnProcessExit
-import xacro
+from launch_ros.parameter_descriptions import ParameterValue
+from launch.substitutions import Command, LaunchConfiguration
 
 def generate_launch_description():
-    # Define the path to the bot description package and xacro file
+    # Define paths to the robot description package and xacro file
     bot_description_path = get_package_share_directory('arm_bot_description')
-    urdf_path = os.path.join(bot_description_path, 'urdf', 'project.urdf.xacro')
+    urdf_default_path = os.path.join(bot_description_path, 'urdf', 'project.urdf.xacro')
     rviz_config_path = os.path.join(bot_description_path, 'rviz', 'boturdf_config.rviz')
     controllers_yaml_path = os.path.join(bot_description_path, 'config', 'my_controllers.yaml')
 
-    # Process the xacro file to generate URDF
-    doc = xacro.process_file(urdf_path)
-    robot_description = {'robot_description': doc.toxml()}
+    # Declare the launch argument for the URDF model
+    urdf_path = DeclareLaunchArgument(
+        name='model',
+        default_value=urdf_default_path,
+        description='Absolute path to robot urdf file'
+    )
 
-    # Include Gazebo launch file
+    # Process the URDF file using xacro
+    robot_description = {
+        'robot_description': ParameterValue(
+            Command(['xacro ', LaunchConfiguration('model')]), value_type=str
+        )
+    }
+
+    # Include the Gazebo launch file
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
         launch_arguments={'world': os.path.join(
-            get_package_share_directory('my_robot_bringup'), 'worlds', 'test_world.world')}.items()
+            get_package_share_directory('arm_bot_description'), 'worlds', 'test.world')}.items()
     )
 
     # Define the robot state publisher node
@@ -48,18 +59,15 @@ def generate_launch_description():
         executable='ros2_control_node',
         parameters=[robot_description, controllers_yaml_path],
         output='screen',
-        remappings=[
-            ('/diffbot_base_controller/cmd_vel_unstamped', '/cmd_vel')
-        ]
     )
 
-    # Define the node to load joint_state_broadcaster
+    # Load joint_state_broadcaster
     load_joint_state_broadcaster = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster'],
         output='screen'
     )
 
-    # Define the node to load diffbot_base_controller
+    # Load diffbot_base_controller
     load_diffbot_base_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'diffbot_base_controller'],
         output='screen'
@@ -73,18 +81,8 @@ def generate_launch_description():
         arguments=['-d', rviz_config_path]
     )
 
-    # Return the LaunchDescription
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'urdf_path',
-            default_value=urdf_path,
-            description='Path to the URDF file'
-        ),
-        DeclareLaunchArgument(
-            'rviz_config_path',
-            default_value=rviz_config_path,
-            description='Path to the RViz config file'
-        ),
+        urdf_path,
         gazebo,
         robot_state_publisher_node,
         spawn_entity,
@@ -103,4 +101,3 @@ def generate_launch_description():
         ),
         rviz_node
     ])
-
