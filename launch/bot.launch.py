@@ -62,15 +62,21 @@ def generate_launch_description():
     )
 
     # Load joint_state_broadcaster
-    load_joint_state_broadcaster = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster'],
-        output='screen'
+    load_joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
     )
 
     # Load diffbot_base_controller
-    load_diffbot_base_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'diffbot_base_controller'],
-        output='screen'
+    load_diffbot_base_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diffbot_base_controller", "--controller-manager", "/controller_manager"],
     )
 
     # Define the RViz node
