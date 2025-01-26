@@ -2,7 +2,7 @@
 
 controller_manager:
    ros__parameters:
-      update_rate: 100
+      update_rate: 100  # Hz
       use_sim_time: true
 
       joint_state_broadcaster:
@@ -20,7 +20,8 @@ diffbot_base_controller:
       
       publish_rate: 50.0
       odom_frame_id: odom
-      base_frame_id: base_link
+      # base_frame_id: base_link
+      base_frame_id: base_footprint
       
       use_stamped_vel: false
       enable_odom_tf: true
