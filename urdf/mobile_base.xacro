@@ -25,14 +25,14 @@
         </geometry>
         <origin xyz="0 0 ${base_height/2.0}" rpy="0 0 0" />
       </collision>
-      <xacro:box_inertia m="5.0" l="${2*base_length}" w="${2*base_width}" 
-      h="${2*base_height}" xyz="0 0 ${base_height/2.0}" rpy="0 0 0"/>
+      <xacro:box_inertia m="5.0" l="${2*base_length}" w="${2*base_width}"  h="${2*base_height}" 
+                         xyz="0 0 ${base_height/2.0}" rpy="0 0 0"/>
     </link>
 
-    <joint name="base_footprint"  type="fixed">
-        <parent link = "base_link" />
-        <child link = "base_footprint" />
-        <origin xyz="0 0 ${-base_height/2.0}" rpy="0 0 0" />
+    <joint name="base_footprint_link_joint"  type="fixed">
+        <parent link = "base_footprint"/>
+        <child link = "base_link"/>
+        <origin xyz="0 0 ${base_height/2.0}" rpy="0 0 0" />
         <axis xyz="0 0 0" />
     </joint> 
 
@@ -54,7 +54,7 @@
                 </geometry>
                 <origin xyz ="0 0 0" rpy="${pi/2.0} 0 0" />
             </collision>
-            <xacro:solid-cylinder_inertia m= "2.0" r= "${2*wheel_radius}"  h="${2*wheel_length}"
+            <xacro:solid-cylinder_inertia m="2.0" r="${2*wheel_radius}"  h="${2*wheel_length}"
                          xyz="0 0 0" rpy="${pi/2.0} 0 0"/>
         </link>
     </xacro:macro>
@@ -78,7 +78,6 @@
         <origin xyz="${-base_length/3.0} ${base_width*0.5625} 0" rpy="0 0 0" />
         <axis xyz="0 1 0" />
     </joint>    
-    
     
     <joint name="base_castor_wheel"  type="fixed">
         <parent link = "base_link" />
@@ -124,6 +123,5 @@
         <mu1 value="0.1"/>
         <mu2 value="0.1"/>
     </gazebo>  
-
 
 </robot>
