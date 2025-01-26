@@ -65,11 +65,7 @@ def generate_launch_description():
     load_joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Load diffbot_base_controller
