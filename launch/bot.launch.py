@@ -57,9 +57,10 @@ def generate_launch_description():
     controller_manager = Node(
         package='controller_manager',
         executable='ros2_control_node',
+        name='diffbot_control_node',
         # parameters=[robot_description, controllers_yaml_path],
         parameters=[controllers_yaml_path],
-        remappings=[("~/robot_description", "/robot_description"),],
+        # remappings=[("~/robot_description", "/robot_description"),],
         output='screen',
     )
 
@@ -67,7 +68,7 @@ def generate_launch_description():
     load_joint_state_broadcaster = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["diffbot_joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Load diffbot_base_controller
@@ -90,7 +91,7 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher_node,
         spawn_entity,
-        # controller_manager,
+        controller_manager,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,
