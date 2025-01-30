@@ -11,9 +11,9 @@ from launch.substitutions import Command, LaunchConfiguration
 def generate_launch_description():
     # Define paths to the robot description package and xacro file
     bot_description_path = get_package_share_directory('arm_bot_description')
-    urdf_default_path = os.path.join(bot_description_path, 'urdf', 'project.urdf.xacro')
-    rviz_config_path = os.path.join(bot_description_path, 'rviz', 'boturdf_config.rviz')
-    controllers_yaml_path = os.path.join(bot_description_path, 'config', 'my_controllers.yaml')
+    urdf_default_path = os.path.join(bot_description_path, 'urdf/project.urdf.xacro')
+    rviz_config_path = os.path.join(bot_description_path, 'rviz/boturdf_config.rviz')
+    controllers_yaml_path = os.path.join(bot_description_path, 'config/my_controllers.yaml')
 
     # Declare the launch argument for the URDF model
     urdf_path = DeclareLaunchArgument(
@@ -57,7 +57,9 @@ def generate_launch_description():
     controller_manager = Node(
         package='controller_manager',
         executable='ros2_control_node',
-        parameters=[robot_description, controllers_yaml_path],
+        # parameters=[robot_description, controllers_yaml_path],
+        parameters=[controllers_yaml_path],
+        remappings=[("~/robot_description", "/robot_description"),],
         output='screen',
     )
 
@@ -88,7 +90,7 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher_node,
         spawn_entity,
-        controller_manager,
+        # controller_manager,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,
